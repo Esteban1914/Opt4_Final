@@ -10,28 +10,28 @@
     <title>Opt4to Final</title>
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-center m-3">
+    <div class="container align-items-center h-100">
+        <div class="row justify-content-center m-5 p-5 text-center">
             <div class="col-auto">
-                <div id="DivID"></div>
+                <div class="display-1" id="DivID">
+                    Solicitando Información
+                </div>
             </div>
         </div>
-        <div class="row justify-content-center m-3 ">
+        <div class="row justify-content-center m-5 p-5">
             <div class="col-auto">
-                <div class="btn btn-{% if active == True %}danger{% else %}success{% endif %}" id="IdBtnActDesact" onclick="BtnActDesact()">{% if active == True %}Desactivar{% else %}Activar{% endif %} </div>
+                <div class="btn btn-lg btn-{% if active == True %}danger{% else %}success{% endif %}" id="IdBtnActDesact" onclick="BtnActDesact()">{% if active == True %}Desactivar{% else %}Activar{% endif %} </div>
             </div>
         </div>
     
     </div>
-    
-    
     
 </body>
 <script src="{% static 'js/home.js' %}">
 </script>
 <script>
     SetAddr('{% url 'home' %}');
-    GetData()
+    GetData();
 </script>
 <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}" ></script>
     

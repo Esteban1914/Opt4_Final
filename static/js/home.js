@@ -22,13 +22,13 @@ function BtnActDesact()
             {
                 GetData();
                 document.getElementById("IdBtnActDesact").innerHTML="Desactivar"
-                document.getElementById("IdBtnActDesact").setAttribute("class","btn btn-danger")
+                document.getElementById("IdBtnActDesact").setAttribute("class","btn btn-lg btn-danger")
             }
             else if ( data == "OK_D")
             {
                 GetData();
                 document.getElementById("IdBtnActDesact").innerHTML="Activar"
-                document.getElementById("IdBtnActDesact").setAttribute("class","btn btn-success")
+                document.getElementById("IdBtnActDesact").setAttribute("class","btn btn-lg btn-success")
             }
             else
                 document.getElementById("DivID").innerHTML="Error al Activar";
@@ -38,7 +38,7 @@ function BtnActDesact()
             alert("Error Conectar con el Servidor",error)
             document.getElementById("DivID").innerHTML="Error Conectar con el Servidor";
             document.getElementById("IdBtnActDesact").innerHTML="Activar"
-            document.getElementById("IdBtnActDesact").setAttribute("class","btn btn-success")
+            document.getElementById("IdBtnActDesact").setAttribute("class","btn btn-lg btn-success")
         });
 }
 
@@ -59,10 +59,10 @@ function GetData()
         .then(data => 
         {
             if( data == "NoActive")
-                document.getElementById("DivID").innerHTML="Thread no Activo"
+                document.getElementById("DivID").innerHTML="Hilo no Activo";
             else
             {
-                document.getElementById("DivID").innerHTML=data
+                document.getElementById("DivID").innerHTML=data;
                 setTimeout(GetData,2000);
             }
         })

@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from django.http import JsonResponse,HttpResponse
-from .Class.MySensor import MySensor
+from django.http import HttpResponse
+from .models import MySensor
 import json
 
 my_sensor=MySensor()
