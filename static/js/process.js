@@ -42,8 +42,6 @@ function BtnActDesact()
         });
 }
 
-
-
 function GetData()
 {
     fetch(ADDR, {
@@ -55,20 +53,29 @@ function GetData()
         },
         body: JSON.stringify({ "GetData": true})
         })
-        .then(response => response.text())
+        .then(response =>  response.json())
         .then(data => 
         {
-            if( data == "NoActive")
+            console.log(data)
+            if( data.NoActive == true)
+            {
                 document.getElementById("DivID").innerHTML="Hilo no Activo";
+                document.getElementById("DivIDLevel").innerHTML="";
+                document.getElementById("DivIDValve").innerHTML="";
+                document.getElementById("DivIDBomb").innerHTML="";
+            }
             else
             {
-                document.getElementById("DivID").innerHTML=data;
+                document.getElementById("DivID").innerHTML="";
+                document.getElementById("DivIDLevel").innerHTML=data.level;
+                document.getElementById("DivIDValve").innerHTML=data.valve;
+                document.getElementById("DivIDBomb").innerHTML=data.bomb;
                 setTimeout(GetData,2000);
             }
         })
         .catch(error => {
             console.log("Error:",error)
-            alert(error)
+            //alert(error)
         });
 }
 function getCookie(name)

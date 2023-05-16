@@ -1,0 +1,43 @@
+{% extends 'Base.html' %}
+{% load static %}
+{% block content %}
+<div class="container align-items-center h-100">
+    
+    <div class="row justify-content-center m-5 p-5 text-center">
+        <div class="col-auto">
+            <div class="display-4" id="DivID">
+                Solicitando Información
+            </div>
+        </div>
+        <div class="col-auto">
+            <div class="display-4" id="DivIDLevel">
+                
+            </div>
+        </div>
+        <div class="col-auto">
+            <div class="display-4" id="DivIDValve">
+                
+            </div>
+        </div>
+        <div class="col-auto">
+            <div class="display-4" id="DivIDBomb">
+                
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center m-5 p-5">
+        <div class="col-auto">
+            <div class="btn btn-lg btn-{% if active == True %}danger{% else %}success{% endif %}" id="IdBtnActDesact" onclick="BtnActDesact()">{% if active == True %}Desactivar{% else %}Activar{% endif %} </div>
+        </div>
+    </div>
+    {% block subcontent %}
+    {% endblock  %}
+</div>
+{% endblock content %}
+{% block script_js %}
+    <script src="{% static 'js/process.js' %}"></script>
+    <script>
+        SetAddr('{% url 'base_post' %}');
+        GetData();
+    </script>
+{% endblock script_js %}

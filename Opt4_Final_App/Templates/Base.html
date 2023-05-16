@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'bootstrap/css/bootstrap.min.css'%}" rel="stylesheet">
+    <link href="{% static 'css/styles.css'%}" rel="stylesheet">
+    <title>Opt4to Final</title>
+</head>
+<body class="body">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+          <div class="container">
+            <a class="navbar-brand h1" ><span class="h2">Control</span></a>
+            <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavId" aria-controls="collapsibleNavId"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavId">
+                <ul class="navbar-nav me-auto mt-2 mt-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link  {% if "Proceso" in request.path %}active{% endif %}" href="{% url 'process' %}" aria-current="page"><span class="h5">Proceso</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if "Config" in request.path %}active{% endif %}" href="{% url 'config' %}" aria-current="page"><span class="h5    ">Configuración</span></a>
+                    </li>
+                    
+                </ul>
+            </div>
+      </div>
+    </nav>
+    {% for message in messages %}
+        <div class="continer-fluid">
+          <div class="d-flex justify-content-center">
+            <div class="p-3 px-5 m-3 alert alert-{% if message.tags == "error" %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show m-2 p-2 text-center" role="alert">
+                <div class="h4">
+                    <strong>
+                      {% if message.tags == "error" %}
+                        Error!
+                      {% elif message.tags == "success" %}
+                        Completado!
+                      {% endif %}
+                      </strong>
+                </div>
+                <div class="h6">
+                    {{ message }}
+                </div> 
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          </div>
+        </div>
+    {% endfor %}    
+    <div class="row text-center justify-content-center m-3">
+        <div class="col-auto">
+            <div class="card">
+                <div class="card-body">
+                    <div class="h2 m-3 mb-1">Modo</div>
+                    <div class="h4 m-3 mt-1">{{mode}}</div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+      
+    {% block content %}
+    {% endblock content %}
+</body>
+
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}" ></script>
+    {% block script_js %}
+    {% endblock script_js %}
+    
+</html>
