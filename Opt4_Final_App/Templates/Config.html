@@ -1,56 +1,100 @@
 {% extends 'Base.html' %}
+{% load static %}
 {% block content %}
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-auto text-center">
             <div class="card">
                 <div class="card-body">
-                    <fieldset class="border px-3 my-3">
-                        <legend class="float-none w-auto h3  mx-auto">Configurar Modo</legend>
-                        <form action="" method="post">
-                            {% csrf_token %}
-                            <div class="row justify-content-center m-3">
-                                <div class="col-6 text-end">
-                                    <input {% if mode == 0 %}checked{% endif %} type="radio" name="group" id="manual" value="0">
-                                    
+                    <div class="row justify-content-center align-items-center ">
+                        <div class="col-auto">
+                            <fieldset class="border px-3 my-3">
+                                <legend class="float-none w-auto h3  mx-auto">Configurar SetPoint</legend>
+                                <div class="mb-3">
+                                  <input type="text" value="{{set_point}}" class="form-control text-center" name="" id="" aria-describedby="helpId" placeholder="">
                                 </div>
-                                <div class="col-6 text-start">
-                                    <div class="h4">
-                                        Manual
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-auto">
+                            <fieldset class="border px-3 my-3">
+                                <legend class="float-none w-auto h3  mx-auto">Configurar Modo</legend>
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    <div class="row  justify-content-center align-items-center m-3">
+                                        <div class="col-6 text-end">
+                                            <input {% if mode == 0 %}checked{% endif %} type="radio" name="group" id="manual" value="0">
+                                            
+                                        </div>
+                                        <div class="col-6 text-start">
+                                            <div class="h4">
+                                                Manual
+                                            </div>
+                                        </div>
+                                        <div class="col-6 text-end">
+                                            <input {% if mode == 1 %}checked{% endif %} type="radio" name="group" id="pid-ec" value="1">
+                                            
+                                        </div>
+                                        <div class="col-6 text-start">
+                                            <div class="h4">
+                                                PID (Entrada Controlada)
+                                            </div>
+                                        </div>
+                                        <div class="col-6 text-end">
+                                            <input {% if mode == 2 %}checked{% endif %} type="radio" name="group" id="pid-sc" value="2">
+                                            
+                                        </div>
+                                        <div class="col-6 text-start">
+                                            <div class="h4">
+                                                PID (Salida Controlada)
+                                            </div>
+                                        </div>
+                                        <div class="col-6 text-end">
+                                            <input {% if mode == 3 %}checked{% endif %} type="radio" name="group" id="pid-cp" value="3">
+                                            
+                                        </div>
+                                        <div class="col-6 text-start">
+                                            <div class="h4">
+                                                PID (Control en Paralelo)
+                                            </div>
+                                        </div>
+                                        
                                     </div>
-                                </div>
-                                {% comment %} <div class="col-6 text-end">
-                                    <input {% if mode == 1 %}checked{% endif %} type="radio" name="group" id="onoff" value="1">
-                                    
-                                </div>
-                                <div class="col-6 text-start">
-                                    <div class="h4">
-                                        ON OFF
+                                    <div class="row justify-content-center">
+                                        <div class="col-auto">
+                                            <input type="submit" id="SetMode"name="SetMode" class="btn btn-warning btn-lg m-4" value="Configurar">
+                                        </div>
                                     </div>
-                                </div> {% endcomment %}
-                                <div class="col-6 text-end">
-                                    <input {% if mode == 2 %}checked{% endif %} type="radio" name="group" id="pid" value="1">
-                                    
-                                </div>
-                                <div class="col-6 text-start">
-                                    <div class="h4">
-                                        PID
-                                    </div>
-                                </div>
-                                
-                            </div>
-                            <div class="row justify-content-center">
-                                <div class="col-auto">
-                                    <input type="submit" id="SetMode"name="SetMode" class="btn btn-success btn-lg m-4" value="Configurar">
-                                </div>
-                            </div>
-                        </form>    
-                    </fieldset>
+                                </form>    
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center mb-3">
+                        <div class="col-auto">
+                            <form action="{% url 'base_post' %}" method="post">
+                                <button  name="BtnActDesact" type="submit" class="btn btn-lg btn-{% if active == True %}danger{% else %}success{% endif %}" id="IdBtnActDesact" onclick="BtnActDesact()">{% if active == True %}Desactivar{% else %}Activar{% endif %} Proceso</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
+                
             </div>
             
-            
+            {% comment %} <div class="row justify-content-center m-5 p-5">
+                <div class="col-auto">
+                    <div class="btn btn-lg btn-{% if active == True %}danger{% else %}success{% endif %}" id="IdBtnActDesact" onclick="BtnActDesact()">{% if active == True %}Desactivar{% else %}Activar{% endif %} </div>
+                </div>
+            </div> {% endcomment %}
         </div>
     </div>
 </div>
 {% endblock content %}
+
+{% block script_js %}
+    <script src="{% static 'js/process.js' %}"></script>
+    <script>
+        SetAddr('{% url 'base_post' %}');
+        GetData();
+    </script>
+{% endblock script_js %}

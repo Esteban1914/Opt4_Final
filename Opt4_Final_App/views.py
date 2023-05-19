@@ -5,54 +5,78 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 import json
 
+
 manager=Manager()
+MODE={
+    0:"Manual",
+    1:"PID Entrada Controlada",
+    2:"PID Salida Controlada",
+    3:"PID Control Paralelo",
+}
 
 def redirect_process(request):
     return redirect('process')
+
 def process(request):
     mode=manager.get_mode()
     context={}
-    context.update({'active':manager.get_active(),'mode':manager.get_mode()})
-    if mode==0:
-        print("A")
-        return render(request,"Manual.html",context)     
+    context.update({'active':manager.get_active(),"set_point":manager.get_set_point(),'mode':manager.get_mode(),"modeStr":MODE.get(manager.get_mode())})
     return render(request,"Process.html",context) 
+
 def config(request):
     try:
         context={}
-        context.update({'active':manager.get_active(),'mode':manager.get_mode()})
+        active=manager.get_active()
+        context.update({'active':active,'mode':manager.get_mode(),"set_point":manager.get_set_point(),"modeStr":MODE.get(manager.get_mode())})
         if request.method=="POST":
             if "SetMode" in request.POST:
                 form=request.POST.dict()
                 mode=int(form.get("group"))
-                if mode: 
+                print(mode)
+                if mode or mode==0: 
                     manager.set_mode(mode)
-                    messages.success(request,"Modo {} asignado".format(mode))
-                    return redirect(config)
+                    context.update({"modeStr":MODE.get(manager.get_mode())})
+                    #messages.success(request,"Modo {} asignado".format(mode))
+                    if active:
+                        return redirect('process')
+                    return redirect('config')
         return render(request,"Config.html",context)
     except Exception as e:
-        messages.error("Error:{}".format(e))
+        messages.error(request,"Error:{}".format(e))
         return redirect('process') 
+
 @csrf_exempt
 def base_post(request):
-    active=manager.get_active()
-    if request.method == "POST":
-        if request.headers.get('X-Requested-With') == 'XMLHttpRequest': 
-            data = json.load(request)
-            if 'BtnActDesact' in data:
-                if active:
-                    manager.desactivate()
-                else:    
-                    manager.activate()
-                return HttpResponse("OK_D" if active == True else "OK_A")    
-            elif 'GetData' in data:
-                if active == False:
-                    return JsonResponse({'NoActive':True})
-                level=manager.get_level()
-                valve=manager.get_valve()
-                bomb=manager.get_bomb()
-                return JsonResponse({"level":level,"valve":valve,"bomb":bomb})
-                return HttpResponse(level)      
-    return HttpResponseBadRequest()
+    try:
+        active=manager.get_active()
+        if request.method == "POST":
+            if 'BtnActDesact' in request.POST:
+                    if active:
+                        manager.desactivate()
+                        return redirect('config')
+                    else:    
+                        manager.activate()
+                        return redirect('process')
+                    #return HttpResponse("OK_D" if active == True else "OK_A")
+            elif request.headers.get('X-Requested-With') == 'XMLHttpRequest': 
+                data = json.load(request)
+                if 'GetData' in data:
+                    if active == False:
+                        return JsonResponse({'NoActive':True})
+                    level=manager.get_level()
+                    valve=manager.get_valve()
+                    bomb=manager.get_bomb()
+                    cistern=manager.get_cistern()
+                    return JsonResponse({"level":level,"cistern":cistern,"valve":valve,"bomb":bomb})
+                elif "IncDecBomb" in data:
+                    incdec=bool(data.get("IncDecBomb"))
+                    manager.incdec_bomb(incdec)
+                elif "IncDecValve" in data:
+                    incdec=bool(data.get("IncDecValve"))
+                    manager.incdec_valve(incdec)
+        
+    except:
+        pass
+    return redirect('process')
     #return render(request,"Home.html",{'active':active}) 
 
