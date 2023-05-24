@@ -10,26 +10,31 @@
     <title>Opt4to Final</title>
 </head>
 <body class="body">
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-          <div class="container">
-            <a class="navbar-brand h1" ><span class="h2">Control</span></a>
-            <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavId" aria-controls="collapsibleNavId"
-                aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="collapsibleNavId">
-                <ul class="navbar-nav me-auto mt-2 mt-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link  {% if "Proceso" in request.path %}active{% endif %}" href="{% url 'process' %}" aria-current="page"><span class="h5">Proceso</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if "Config" in request.path %}active{% endif %}" href="{% url 'config' %}" aria-current="page"><span class="h5    ">Configuración</span></a>
-                    </li>
-                    
-                </ul>
-            </div>
-      </div>
+    <nav class="nav justify-content-center bg-light align-items-center">
+        <a class="  nav-link h1 {% if not "Proceso" in request.path %}text-dark{% endif %}" href="{% url 'process' %}" aria-current="page"><span class="h5">Proceso</span></a>
+        {% if request.user.groups.count  %}
+            <a class="nav-link h1 {% if not "Config" in request.path %}text-dark{% endif %}" href="{% url 'config' %}" aria-current="page"><span class="h5    ">Configuración</span></a>
+        {% endif %}
     </nav>
+    <div class="row justify-content-end">
+        <div class="col-auto h3">
+            <div class="row text-center">
+                <div class="col-12">
+                    {{request.user.username}}
+                </div>
+                <div class="col-12">
+                    <form action="{% url 'login_post' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="submit" value="Desconectar" name="CerrarSesion" class="btn btn-danger btn-sm">
+                    </form>
+                </div>
+            </div>
+            
+        
+        </div>
+        
+        
+    </div>
     {% for message in messages %}
         <div class="continer-fluid">
           <div class="d-flex justify-content-center">

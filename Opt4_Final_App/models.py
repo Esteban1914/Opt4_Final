@@ -32,8 +32,7 @@ class Manager():
     def __del__(self):
         self.desactivate()
     
-    def loop(self):
-        
+    def loop(self):     
         def _round(data,dec):
             data=round(data,dec)
             pow_10_dec=pow(10,dec)
@@ -61,7 +60,6 @@ class Manager():
             if self.__look_loop == True:
                 return
             self.__look_loop = True
-        desactivate=False
         while(True):
             if not __error_limits():
                 with self.__look:
@@ -78,11 +76,7 @@ class Manager():
                     #Modo PID Salida Controlada
                     elif self.__mode == 2:
                         self.__valve=_round(self.__valve_pid(self.__level),3)
-                    #Modo PID Control Paralelo
-                    elif self.__mode == 3:
-                        self.__bomb= _round(self.__bomb_pid(self.__level),3)
-                        self.__valve=_round(self.__valve_pid(self.__level),3)
-                        pass
+    
                     else:
                         break
                     

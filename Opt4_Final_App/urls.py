@@ -5,4 +5,5 @@ urlpatterns = [
     path('Proceso/', views.process, name="process"),
     path('Config/', views.config, name="config"),
     path('BasePost/', views.base_post, name="base_post"),  
+    path('Login/',views.login_post,name='login_post'),
 ]

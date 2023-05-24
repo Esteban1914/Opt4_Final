@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'bootstrap/css/bootstrap.min.css'%}" rel="stylesheet">
+    <link href="{% static 'css/styles.css'%}" rel="stylesheet">
+    <title>Login</title>
+</head>
+<body class="body">
+    <div class="container h-100">
+        <div class="row h-100 justify-content-center align-items-center">
+            <div class="col-auto">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <div class="display-4 text-center m-4">Entrar</div>
+                    <div class="form-floating mb-3">
+                      <input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" required="" class="form-control" id="floatingInput" placeholder="Ususario">
+                      <label for="floatingInput">Usuario</label>
+                    </div>
+                    <div class="form-floating">
+                      <input type="password" name="password" autocomplete="current-password" required="" class="form-control" id="floatingPassword" placeholder="Password">
+                      <label for="floatingPassword">Password</label>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-auto">
+                            <input type="submit" class="btn btn-success btn-lg m-3" name="Inicar_Sesion"value="Ingresar">
+                    
+                        </div>
+                    </div>
+                    
+                  </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}" ></script>
+    
+    
+</html>

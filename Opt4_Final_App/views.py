@@ -1,5 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse,HttpResponseBadRequest,JsonResponse
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate,login,logout
 from .models import Manager
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
@@ -11,32 +13,42 @@ MODE={
     0:"Manual",
     1:"PID Entrada Controlada",
     2:"PID Salida Controlada",
-    3:"PID Control Paralelo",
 }
 
 def redirect_process(request):
     return redirect('process')
 
+
+
 def process(request):
-    mode=manager.get_mode()
-    context={}
-    context.update({'active':manager.get_active(),"set_point":manager.get_set_point(),'mode':manager.get_mode(),"modeStr":MODE.get(manager.get_mode())})
+    if not request.user.is_authenticated:
+        return redirect("login_post")
+        
+    context={'active':manager.get_active(),"set_point":manager.get_set_point(),'mode':manager.get_mode(),"modeStr":MODE.get(manager.get_mode())}
     return render(request,"Process.html",context) 
 
 def config(request):
+    if not request.user.is_authenticated:
+        return redirect("login_post")
     try:
         context={}
         active=manager.get_active()
-        context.update({'active':active,'mode':manager.get_mode(),"set_point":manager.get_set_point(),"modeStr":MODE.get(manager.get_mode())})
+        mode=manager.get_mode()
+        set_point=manager.get_set_point()
+        context.update({'active':active,'mode':mode,"set_point":set_point,"modeStr":MODE.get(mode)})
         if request.method=="POST":
-            if "SetMode" in request.POST:
+            if "SetConfg" in request.POST:
                 form=request.POST.dict()
-                mode=int(form.get("group"))
-                print(mode)
-                if mode or mode==0: 
-                    manager.set_mode(mode)
-                    context.update({"modeStr":MODE.get(manager.get_mode())})
-                    #messages.success(request,"Modo {} asignado".format(mode))
+                form_mode=int(form.get("group"))
+                form_set_point=float(form.get("SetPoint"))
+                
+                if form_mode or form_mode == 0: 
+                    if form_mode != mode:
+                        manager.set_mode(form_mode)
+                        context.update({"modeStr":MODE.get(manager.get_mode())})
+                    if form_set_point != set_point:
+                        manager.set_setpoint(form_set_point)
+                        context.update({"set_point":manager.get_set_point()})
                     if active:
                         return redirect('process')
                     return redirect('config')
@@ -44,6 +56,30 @@ def config(request):
     except Exception as e:
         messages.error(request,"Error:{}".format(e))
         return redirect('process') 
+
+def login_post(request):
+    
+    if request.method=="POST":
+        if "Inicar_Sesion" in request.POST:
+            formlogin=AuthenticationForm(request,data=request.POST)
+            if formlogin.is_valid():
+                nombre=formlogin.cleaned_data.get("username")
+                contra=formlogin.cleaned_data.get("password")
+                
+                usuario=authenticate(username=nombre,password=contra)
+                if usuario is not None:
+                    login(request,usuario)
+                    messages.success(request ,"{} Conectado".format(nombre))    
+                    return redirect('process')
+            
+        elif "CerrarSesion" in request.POST:
+            user=request.user.username
+            logout(request)
+            messages.success(request,"{} desconectado".format(request.user))    
+    if request.user.is_authenticated:
+        return redirect("process")
+            
+    return render(request,"Login.html")
 
 @csrf_exempt
 def base_post(request):
