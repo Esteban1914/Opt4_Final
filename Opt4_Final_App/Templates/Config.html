@@ -55,10 +55,10 @@
                         <div class="row justify-content-center mb-3">
                             <div class="col-auto">
                                 <form action="{% url 'base_post' %}" method="post">
-                                    <button  name="BtnActDesact" type="submit" class="btn btn-lg btn-{% if active == True %}danger{% else %}success{% endif %}" id="IdBtnActDesact" onclick="BtnActDesact()">{% if active == True %}Detener{% else %}Iniciar{% endif %}</button>
+                                    <button  name="BtnActDesact" type="submit" class="btn btn-lg btn-{% if active == True %}danger{% else %}success{% endif %}" id="IdBtnActDesact">{% if active == True %}Detener{% else %}Iniciar{% endif %}</button>
                                 </form>
                             </div>
-                        </div>
+                        </div> 
                     </div>
                     
                 </div>

@@ -93,7 +93,6 @@ def base_post(request):
                     else:    
                         manager.activate()
                         return redirect('process')
-                    #return HttpResponse("OK_D" if active == True else "OK_A")
             elif request.headers.get('X-Requested-With') == 'XMLHttpRequest': 
                 data = json.load(request)
                 if 'GetData' in data:
@@ -103,7 +102,9 @@ def base_post(request):
                     valve=manager.get_valve()
                     bomb=manager.get_bomb()
                     cistern=manager.get_cistern()
-                    return JsonResponse({"level":level,"cistern":cistern,"valve":valve,"bomb":bomb})
+                    error=manager.get_error(
+                    )
+                    return JsonResponse({"level":level,"cistern":cistern,"valve":valve,"bomb":bomb,"error":error})
                 elif "IncDecBomb" in data:
                     incdec=bool(data.get("IncDecBomb"))
                     manager.incdec_bomb(incdec)

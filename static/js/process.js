@@ -66,6 +66,10 @@ function GetData()
             else
             {
                 //document.getElementById("DivID").innerHTML="";
+                if (data.error==false)
+                    document.getElementById("DivID").innerHTML=data.error; 
+                else
+                    document.getElementById("DivID").innerHTML="";
                 document.getElementById("DivIDLevel").innerHTML=data.level;
                 document.getElementById("DivIDCistern").innerHTML=data.cistern;
                 document.getElementById("DivIDValve").innerHTML=data.valve;
