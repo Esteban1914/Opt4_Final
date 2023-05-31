@@ -9,6 +9,7 @@ import json
 
 
 manager=Manager()
+
 MODE={
     0:"Manual",
     1:"PID Entrada Controlada",
@@ -17,8 +18,6 @@ MODE={
 
 def redirect_process(request):
     return redirect('process')
-
-
 
 def process(request):
     if not request.user.is_authenticated:
@@ -58,7 +57,6 @@ def config(request):
         return redirect('process') 
 
 def login_post(request):
-    
     if request.method=="POST":
         if "Inicar_Sesion" in request.POST:
             formlogin=AuthenticationForm(request,data=request.POST)
@@ -78,7 +76,7 @@ def login_post(request):
             messages.success(request,"{} desconectado".format(request.user))    
     if request.user.is_authenticated:
         return redirect("process")
-            
+    
     return render(request,"Login.html")
 
 @csrf_exempt
@@ -93,6 +91,7 @@ def base_post(request):
                     else:    
                         manager.activate()
                         return redirect('process')
+                    #return HttpResponse("OK_D" if active == True else "OK_A")
             elif request.headers.get('X-Requested-With') == 'XMLHttpRequest': 
                 data = json.load(request)
                 if 'GetData' in data:
@@ -102,8 +101,7 @@ def base_post(request):
                     valve=manager.get_valve()
                     bomb=manager.get_bomb()
                     cistern=manager.get_cistern()
-                    error=manager.get_error(
-                    )
+                    error=manager.get_error()
                     return JsonResponse({"level":level,"cistern":cistern,"valve":valve,"bomb":bomb,"error":error})
                 elif "IncDecBomb" in data:
                     incdec=bool(data.get("IncDecBomb"))

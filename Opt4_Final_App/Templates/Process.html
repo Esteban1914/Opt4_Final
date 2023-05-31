@@ -30,7 +30,7 @@
                                 -
                             </div>
                         </div>
-                        {% if active %}
+                        {% if request.user.groups.count %}
                         
                             {% if mode == 0 or mode == 2 %}
                                 <div class="card-footer">
@@ -74,7 +74,7 @@
                                 -
                             </div>
                         </div>
-                        {% if active %}
+                        {% if request.user.groups.count %}
                             {% if mode == 0 or mode == 1 %}
                                 <div class="card-footer">
                                     <div class="row justify-content-center ">
